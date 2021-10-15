@@ -14,9 +14,11 @@ import androidx.annotation.Nullable;
 public class ZQview extends LinearLayout {
     private static final String TAG = "SlideView";
     private static final int TAN = 2;
-    private int mHolderWidth = 65;
+    private int mHolderWidth = 120;
     private float  mLastX = 0;
     private float mLastY = 0;
+    private float x  = 0;
+    private float y =0;
     private Context mContext;
     private LinearLayout mViewContent;
     private Scroller mScroller;
@@ -42,7 +44,6 @@ public class ZQview extends LinearLayout {
         mScroller = new Scroller(mContext);
         View.inflate(mContext,R.layout.delete_view,this);
         mViewContent = (LinearLayout) findViewById(R.id.view_content);
-        Log.d(TAG, "initView: "+mViewContent);
         mHolderWidth = Math.round((TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,mHolderWidth,getResources().getDisplayMetrics()
         )));
@@ -88,19 +89,41 @@ public class ZQview extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                x  = event.getX();
+                y  = event.getY();
+                break;
+
+
+
             case MotionEvent.ACTION_MOVE:
-                float x  = event.getX();
-                float y  = event.getY();
-                float deltaX = x-mLastX;
-                float deltaY = y-mLastY;
+//                float x  = event.getX();
+//                float y  = event.getY();
+//                float deltaX = x-mLastX;
+//                float deltaY = y-mLastY;
                 mLastX = x;
                 mLastY = y;
-                if(Math.abs(deltaX)<Math.abs(deltaY)*TAN){
-                    break;
-                }
+
+                float move_x  = event.getX();
+                float move_y  = event.getY();
+                float deltaX = move_x-x;
+                float deltaY = move_y-y;
+
+                Log.d(TAG, "onTouchEvent:deltaXY: "+deltaX+"+++"+deltaY);
+//                if(Math.abs(deltaX)<Math.abs(deltaY)*TAN){
+//                    break;
+//                }
+//                if(Math.abs(deltaX)<Math.abs(deltaY)*TAN ||deltaX>0){
+//                    break;
+//                }
+//                if(deltaX>0){
+//                    break;
+//                }
                 if(deltaX!= 0){
                     float newScrollx = getScaleX() - deltaX;
+                    Log.d(TAG, "onTouchEvent: newScrollx: "+newScrollx);
                     if(newScrollx<0){
                         newScrollx =0;
                     }else if (newScrollx>mHolderWidth){
@@ -109,6 +132,14 @@ public class ZQview extends LinearLayout {
                     this.scrollTo((int)newScrollx, 0);
                 }
                 break;
+
+            case MotionEvent.ACTION_UP:
+                x = 0;
+                y = 0;
+                break;
+            
+            default:
+                Log.d(TAG, "onTouchEvent: default");
         }
         return super.onTouchEvent(event);
     }

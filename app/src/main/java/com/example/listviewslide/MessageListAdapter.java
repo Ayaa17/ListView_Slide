@@ -53,8 +53,6 @@ public class MessageListAdapter extends BaseAdapter {
         if(slideView == null){
             View itemView = inflater.inflate(R.layout.message_list_item, null);
             slideView = new ZQview(context);
-            Log.d("TAG", "getView1: "+slideView);
-            Log.d("TAG", "getView2: "+itemView);
             slideView.setContentView(itemView);
             viewHolder = new ViewHolder(slideView);
             slideView.setTag(viewHolder);

@@ -2,6 +2,7 @@ package com.example.listviewslide;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.ListView;
 
@@ -32,6 +33,7 @@ public class ZQListView extends ListView {
         float y = ev.getY();
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "onTouchEvent: ACTION_DOWN");
                 isSlider = false;
                 mX = x;
                 mY =y;
@@ -44,8 +46,9 @@ public class ZQListView extends ListView {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.d(TAG, "onTouchEvent: ACTION_MOVE");
                 if(mPosition != -1){
-                    if(Math.abs(mY-y)<30&&Math.abs(mX-x)>20){
+                    if(Math.abs(mY-y)<30&&Math.abs(mX-x)>20||isSlider){
                         int first = this.getFirstVisiblePosition();
                         int index = mPosition -first ;
                         mFocusedItemView = (ZQview)getChildAt(index);
@@ -56,6 +59,7 @@ public class ZQListView extends ListView {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                Log.d(TAG, "onTouchEvent: ACTION_UP");
                 if(isSlider){
                     isSlider = false;
                     if(mFocusedItemView!=null){
